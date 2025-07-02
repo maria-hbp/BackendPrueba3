@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import axios from 'axios';
 import * as React from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { Avatar, Button, Card, Text, TextInput, useTheme } from 'react-native-paper';
@@ -16,18 +17,34 @@ const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>(
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const [submitting, setSubmitting] = React.useState(false);
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (!name || !email || !password || password !== confirmPassword) {
       alert('Completa todos los campos y asegúrate que las contraseñas coincidan.');
       return;
     }
     setSubmitting(true);
-    // Aquí conectarías a tu backend
-    setTimeout(() => {
+    try {
+      const response = await axios.post('http://192.168.1.6:8080/api/users/register', {
+        name,
+        email,
+        password,
+      });
+
+      if (response.data.success) {
+        alert('¡Registro exitoso!');
+        navigation.navigate('login');
+      } else {
+        alert(response.data.message || 'Error en el registro');
+      }
+    } catch (error: any) {
+      if (error.response && error.response.data && error.response.data.message) {
+        alert(error.response.data.message);
+      } else {
+        alert('Ocurrió un error al registrar. Intenta más tarde.');
+      }
+    } finally {
       setSubmitting(false);
-      alert('¡Registro exitoso!');
-      navigation.navigate('login');
-    }, 1200);
+    }
   };
 
   return (

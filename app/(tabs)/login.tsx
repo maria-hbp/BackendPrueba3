@@ -1,22 +1,44 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import * as React from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { Avatar, Button, Card, Text, TextInput, useTheme } from 'react-native-paper';
-
 export default function LoginScreen() {
   const theme = useTheme();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [submitting, setSubmitting] = React.useState(false);
 
-  const handleLogin = () => {
+    const handleLogin = async () => {
     setSubmitting(true);
-    // Aquí deberías conectar a tu backend de autenticación
-    setTimeout(() => {
-      setSubmitting(false);
+    try {
+      const response = await axios.post(
+        'http://192.168.1.6:8080/api/users/login',
+        {
+          email,
+          password
+        }
+      );
+      if (response.data.success) {
+      const userData = response.data.data;
+      await AsyncStorage.setItem('userToken', userData.token);
+      await AsyncStorage.setItem('userData', JSON.stringify(userData));
       alert('¡Bienvenido a Copper Bites!');
-      // Aquí podrías navegar a la home o a otra pantalla
-    }, 1200);
-  };
+      
+    } else {
+      alert(response.data.message || 'Error al iniciar sesión');
+    }
+  } catch (error: any) {
+    if (error.response) {
+      alert(error.response.data.message || 'Error al iniciar sesión');
+    } else {
+      alert('Error de red o servidor no disponible');
+    }
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 
   return (
     <KeyboardAvoidingView
