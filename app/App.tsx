@@ -10,7 +10,7 @@ import ContactScreen from './(tabs)/contact';
 import HomeScreen from './(tabs)/index';
 import LoginScreen from './(tabs)/login';
 import MenuScreen from './(tabs)/menu';
-import SignupScreen from './(tabs)/signup';
+import SignupScreen from './signup';
 
 const Stack = createNativeStackNavigator();
 

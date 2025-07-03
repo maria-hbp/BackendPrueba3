@@ -2,7 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState } from 'react';
-import { ActivityIndicator, Button, Image, TextInput, View } from 'react-native';
+import { Image } from 'react-native';
+import { ActivityIndicator, Button, Card, Provider as PaperProvider, TextInput } from 'react-native-paper';
 
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dnevu2z9i/image/upload';
 const CLOUDINARY_PRESET = 'prueba3';
@@ -109,57 +110,75 @@ export default function CreateDishScreen() {
   };
 
   return (
-    <View style={{ padding: 20 }}>
-      <TextInput
-        placeholder="Nombre"
-        value={fields.name}
-        onChangeText={v => setFields(f => ({ ...f, name: v }))}
-        style={{ marginBottom: 10, borderBottomWidth: 1 }}
-      />
-      <TextInput
-        placeholder="Descripción"
-        value={fields.description}
-        onChangeText={v => setFields(f => ({ ...f, description: v }))}
-        multiline
-        style={{ marginBottom: 10, borderBottomWidth: 1 }}
-      />
-      <TextInput
-        placeholder="Precio"
-        value={fields.price}
-        keyboardType="numeric"
-        onChangeText={v => setFields(f => ({ ...f, price: v }))}
-        style={{ marginBottom: 10, borderBottomWidth: 1 }}
-      />
-      <TextInput
-        placeholder="Categoría (entree, main course, dessert, beverage, snack)"
-        value={fields.category}
-        onChangeText={v => setFields(f => ({ ...f, category: v }))}
-        style={{ marginBottom: 10, borderBottomWidth: 1 }}
-      />
-      <TextInput
-        placeholder="Ingredientes"
-        value={fields.ingredients}
-        onChangeText={v => setFields(f => ({ ...f, ingredients: v }))}
-        multiline
-        style={{ marginBottom: 10, borderBottomWidth: 1 }}
-      />
-      <Button
-        title="Seleccionar Imagen"
-        onPress={pickImage}
-        disabled={uploading}
-      />
-      {localImage && (
-        <Image
-          source={{ uri: localImage }}
-          style={{ width: 200, height: 120, marginVertical: 10, alignSelf: 'center' }}
+    <PaperProvider>
+      <Card style={{ margin: 20, padding: 20 }}>
+        <TextInput
+          label="Nombre"
+          value={fields.name}
+          onChangeText={v => setFields(f => ({ ...f, name: v }))}
+          style={{ marginBottom: 10 }}
+          mode="outlined"
+          disabled={uploading}
         />
-      )}
-      <Button
-        title={uploading ? 'Subiendo...' : 'Crear Platillo'}
-        onPress={handleSubmit}
-        disabled={uploading}
-      />
-      {uploading && <ActivityIndicator size="large" style={{ marginTop: 10 }} />}
-    </View>
+        <TextInput
+          label="Descripción"
+          value={fields.description}
+          onChangeText={v => setFields(f => ({ ...f, description: v }))}
+          multiline
+          style={{ marginBottom: 10 }}
+          mode="outlined"
+          disabled={uploading}
+        />
+        <TextInput
+          label="Precio"
+          value={fields.price}
+          keyboardType="numeric"
+          onChangeText={v => setFields(f => ({ ...f, price: v }))}
+          style={{ marginBottom: 10 }}
+          mode="outlined"
+          disabled={uploading}
+        />
+        <TextInput
+          label="Categoría (entree, main course, dessert, beverage, snack)"
+          value={fields.category}
+          onChangeText={v => setFields(f => ({ ...f, category: v }))}
+          style={{ marginBottom: 10 }}
+          mode="outlined"
+          disabled={uploading}
+        />
+        <TextInput
+          label="Ingredientes"
+          value={fields.ingredients}
+          onChangeText={v => setFields(f => ({ ...f, ingredients: v }))}
+          multiline
+          style={{ marginBottom: 10 }}
+          mode="outlined"
+          disabled={uploading}
+        />
+        <Button
+          mode="contained"
+          onPress={pickImage}
+          disabled={uploading}
+          style={{ marginBottom: 10 }}
+        >
+          Seleccionar Imagen
+        </Button>
+        {localImage && (
+          <Image
+            source={{ uri: localImage }}
+            style={{ width: 200, height: 120, marginVertical: 10, alignSelf: 'center' }}
+          />
+        )}
+        <Button
+          mode="contained"
+          onPress={handleSubmit}
+          disabled={uploading}
+          loading={uploading}
+        >
+          {uploading ? 'Subiendo...' : 'Crear Platillo'}
+        </Button>
+        {uploading && <ActivityIndicator animating={true} size="large" style={{ marginTop: 10 }} />}
+      </Card>
+    </PaperProvider>
   );
 }

@@ -1,50 +1,62 @@
-# Welcome to your Expo app 👋
+# CopperBites 🍽️
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Propósito 🎯
 
-## Get started
+CopperBites es una aplicación móvil diseñada para que restaurantes gestionen sus menús, platillos y pedidos de manera eficiente. Permite agregar, visualizar y administrar platillos con fotos, precios y categorías, facilitando la actualización constante del menú. Además, las imágenes de los platillos se suben y almacenan en Cloudinary para una gestión óptima y segura.
 
-1. Install dependencies
+---
+
+## Tecnologías Usadas 🛠️
+
+- **Expo** – Plataforma para desarrollo rápido de apps móviles.
+- **React Native** – Framework para construir interfaces nativas.
+- **TypeScript / JavaScript** – Lenguajes de programación principales.
+- **Axios** – Para realizar solicitudes HTTP.
+- **Cloudinary** – Servicio para almacenamiento y gestión de imágenes.
+- Otras librerías y herramientas relevantes para la funcionalidad y diseño.
+
+---
+
+## Instalación 🚀
+
+Sigue estos pasos para poner en marcha CopperBites en tu entorno local:
+
+1. **Clonar el repositorio**
+
+   ```bash
+   git clone <URL_DEL_REPOSITORIO>
+   cd CopperBitesFrontend-main
+   ```
+
+2. **Instalar dependencias**
 
    ```bash
    npm install
    ```
 
-2. Start the app
+3. **Configurar variables de entorno**
+
+   Crea un archivo `.env` en la raíz del proyecto y añade las variables necesarias para Cloudinary y cualquier otro servicio utilizado. Ejemplo:
+
+   ```
+   CLOUDINARY_CLOUD_NAME=tu_nombre_de_cloud
+   CLOUDINARY_API_KEY=tu_api_key
+   CLOUDINARY_API_SECRET=tu_api_secret
+   ```
+
+4. **Iniciar la aplicación**
 
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+---
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Uso Básico 📱
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- **Iniciar la app:** Usa Expo Go o un emulador para abrir la aplicación y comenzar a interactuar.
+- **Crear un platillo:** Navega a la sección de gestión de platillos y utiliza el formulario para añadir un nuevo platillo con nombre, descripción, precio y categoría.
+- **Subir una foto:** Selecciona una imagen desde tu dispositivo; la app la cargará automáticamente a Cloudinary y asociará la URL al platillo.
+- **Navegar entre pantallas:** Usa la barra de navegación o gestos para moverte entre las diferentes secciones de la app como menú, pedidos y perfil.
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---

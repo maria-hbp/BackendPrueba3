@@ -3,13 +3,12 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
-  Image,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { ActivityIndicator, Card, Provider as PaperProvider, Text } from "react-native-paper";
 
 interface Dish {
   id: string;
@@ -21,7 +20,7 @@ interface Dish {
 
 const categoriesOrder = ['entree', 'main course', 'dessert', 'beverage', 'snack'];
 
-export default function MenuScreen() {
+function MenuContent() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [dishesByCategory, setDishesByCategory] = useState<Record<string, Dish[]>>({});
@@ -57,7 +56,8 @@ export default function MenuScreen() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <Text>Cargando platillos...</Text>
+        <ActivityIndicator animating={true} size="large" />
+        <Text style={{ marginTop: 10 }}>Cargando platillos...</Text>
       </View>
     );
   }
@@ -70,7 +70,7 @@ export default function MenuScreen() {
 
         return (
           <View key={category} style={{ width: "100%", marginBottom: 20 }}>
-            <Text style={styles.categoryTitle}>{category.charAt(0).toUpperCase() + category.slice(1)}</Text>
+            <Text variant="titleLarge" style={styles.categoryTitle}>{category.charAt(0).toUpperCase() + category.slice(1)}</Text>
             <FlatList
               data={dishes}
               keyExtractor={(item) => item.id}
@@ -78,12 +78,15 @@ export default function MenuScreen() {
               showsHorizontalScrollIndicator={false}
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  style={styles.card}
                   onPress={() => router.push(`/menu/${item.id}`)}
                 >
-                  <Image source={{ uri: item.image }} style={styles.cardImage} />
-                  <Text style={styles.cardName}>{item.name}</Text>
-                  <Text style={styles.cardPrice}>${item.price}.00</Text>
+                  <Card style={styles.card}>
+                    <Card.Cover source={{ uri: item.image }} style={styles.cardImage} />
+                    <Card.Content style={{ alignItems: "center" }}>
+                      <Text style={styles.cardName}>{item.name}</Text>
+                      <Text style={styles.cardPrice}>${item.price}.00</Text>
+                    </Card.Content>
+                  </Card>
                 </TouchableOpacity>
               )}
             />
@@ -91,6 +94,14 @@ export default function MenuScreen() {
         );
       })}
     </ScrollView>
+  );
+}
+
+export default function MenuScreen() {
+  return (
+    <PaperProvider>
+      <MenuContent />
+    </PaperProvider>
   );
 }
 
@@ -102,31 +113,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   categoryTitle: {
-    fontWeight: "600",
-    fontSize: 22,
     marginBottom: 10,
     marginLeft: 5,
     textTransform: "capitalize",
   },
   card: {
-    backgroundColor: "#fff",
     borderRadius: 15,
     marginRight: 15,
     width: 150,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
-    paddingBottom: 10,
   },
   cardImage: {
-    height: 120,
-    width: "100%",
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    resizeMode: "cover",
+    height: 120,
   },
   cardName: {
     fontWeight: "600",

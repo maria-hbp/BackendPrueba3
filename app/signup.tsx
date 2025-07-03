@@ -4,7 +4,7 @@ import axios from 'axios';
 import * as React from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { Avatar, Button, Card, Text, TextInput, useTheme } from 'react-native-paper';
-import type { RootStackParamList } from '../App'; // Ajusta path según tu estructura
+import type { RootStackParamList } from './App'; // Ajusta path según tu estructura
 
 
 export default function SignupScreen() {

@@ -7,7 +7,7 @@ import ContactScreen from '../app/(tabs)/contact';
 import HomeScreen from '../app/(tabs)/index';
 import LoginScreen from '../app/(tabs)/login';
 import MenuScreen from '../app/(tabs)/menu';
-import SignupScreen from '../app/(tabs)/signup';
+import SignupScreen from '../app/signup';
 
 const Stack = createNativeStackNavigator();
 
