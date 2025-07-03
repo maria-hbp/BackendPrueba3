@@ -49,7 +49,7 @@ export default function Orders() {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const token = await AsyncStorage.getItem("token");
+      const token = await AsyncStorage.getItem("userToken");
       if (!token) {
         alert("No token found, please login again.");
         setLoading(false);
@@ -58,9 +58,11 @@ export default function Orders() {
       const response = await axios.get("http://192.168.1.6:8080/api/orders", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setOrders(response.data);
-    } catch (error) {
-      alert("Error fetching orders.");
+      console.log("Fetch orders response:", response);
+      setOrders(response.data.data ?? response.data ?? []);
+    } catch (error: any) {
+      console.log("Fetch orders error:", error);
+      alert(error.response?.data?.message ?? "Error fetching orders.");
     } finally {
       setLoading(false);
     }
@@ -76,19 +78,20 @@ export default function Orders() {
       else if (order.status === "completed") newStatus = "cancelled";
       else newStatus = "pending";
 
-      const token = await AsyncStorage.getItem("token");
+      const token = await AsyncStorage.getItem("userToken");
       if (!token) {
         alert("No token found, please login again.");
         return;
       }
 
-      await axios.put(
-        `/orders/${id}`,
+      const response = await axios.put(
+        `http://192.168.1.6:8080/api/orders/${id}`,
         { status: newStatus },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      console.log("Change order status response:", response);
 
       Notifications.scheduleNotificationAsync({
         content: {
@@ -100,8 +103,9 @@ export default function Orders() {
       });
 
       fetchOrders();
-    } catch (error) {
-      alert("Error updating order status.");
+    } catch (error: any) {
+      console.log("Change order status error:", error);
+      alert(error.response?.data?.message ?? "Error updating order status.");
     }
   };
 

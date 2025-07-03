@@ -23,6 +23,7 @@ export default function LoginScreen() {
       const userData = response.data.data;
       await AsyncStorage.setItem('userToken', userData.token);
       await AsyncStorage.setItem('userData', JSON.stringify(userData));
+      await AsyncStorage.setItem('userId', String(userData.id));
       alert('¡Bienvenido a Copper Bites!');
       
     } else {

@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -40,6 +41,35 @@ function DishDetailScreen() {
       });
   }, [id]);
 
+  const handleAddToCart = async () => {
+    if (!dish) return;
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      if (!userId) {
+        alert('No se encontró el usuario. Por favor, inicia sesión.');
+        return;
+      }
+    const token = await AsyncStorage.getItem('userToken');
+    if (!token) {
+      alert('No se encontró el token de autenticación. Por favor, inicia sesión.');
+      return;
+    }
+    await axios.post('http://192.168.1.6:8080/api/orders', {
+        userId,
+        totalPrice: Number(dish.price),
+        dishes: [Number(dish.id)],
+        quantity: 1,
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    alert(`Platillo ${dish.name} agregado al carrito`);
+    } catch (err) {
+      alert(dish.id);
+      alert('Error al agregar el platillo al carrito');
+    }
+  };
   if (loading) {
     return (
       <ScrollView contentContainerStyle={styles.container}>
@@ -74,7 +104,7 @@ function DishDetailScreen() {
           )}
         </Card.Content>
         <Card.Actions>
-          <Button mode="contained" onPress={() => alert('Platillo agregado al carrito')} buttonColor="#e74c3c">
+          <Button mode="contained" onPress={handleAddToCart} buttonColor="#e74c3c">
             Añadir al carrito
           </Button>
         </Card.Actions>
