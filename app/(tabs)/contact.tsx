@@ -1,6 +1,14 @@
+import * as Location from 'expo-location';
 import * as React from 'react';
 import { KeyboardAvoidingView, Linking, Platform, StyleSheet, View } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
 import { Avatar, Button, Card, Text, TextInput, useTheme } from 'react-native-paper';
+
+const DESTINATION = {
+  latitude: -23.678895,
+  longitude: -70.409455,
+};
 
 export default function ContactScreen() {
   const theme = useTheme();
@@ -8,6 +16,22 @@ export default function ContactScreen() {
   const [email, setEmail] = React.useState('');
   const [message, setMessage] = React.useState('');
   const [submitting, setSubmitting] = React.useState(false);
+  const [origin, setOrigin] = React.useState<{ latitude: number; longitude: number } | null>(null);
+
+  React.useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setOrigin({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+    })();
+  }, []);
 
   const handleSend = () => {
     setSubmitting(true);
@@ -26,6 +50,31 @@ export default function ContactScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View style={styles.container}>
+        <Card style={styles.mapCard}>
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: DESTINATION.latitude,
+              longitude: DESTINATION.longitude,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }}
+          >
+            <Marker
+              coordinate={DESTINATION}
+              title="Copper Bites Restaurant"
+            />
+            {origin && (
+              <MapViewDirections
+                origin={origin}
+                destination={DESTINATION}
+                apikey={process.env.GOOGLE_MAPS_API_KEY || ''}
+                strokeWidth={4}
+                strokeColor="#1976D2"
+              />
+            )}
+          </MapView>
+        </Card>
         <Card style={styles.card}>
           <Card.Title
             title="Contáctanos"
@@ -94,6 +143,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 24,
+  },
+  mapCard: {
+    borderRadius: 18,
+    elevation: 2,
+    marginBottom: 16,
+    overflow: 'hidden',
+  },
+  map: {
+    height: 220,
+    borderRadius: 18,
   },
   card: {
     borderRadius: 18,
